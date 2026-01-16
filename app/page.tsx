@@ -23,6 +23,7 @@ export default function Home() {
             uppercase
             select-none
             font-['Cinzel']
+            w-[fit-content]
           "
           style={{
             color: '#916346',
