@@ -23,13 +23,55 @@ export default function Countdown() {
   }, [])
 
   return (
-    <div className="flex gap-6 text-center text-xl">
-      {Object.entries(time).map(([k, v]) => (
-        <div key={k}>
-          <div className="text-3xl font-semibold">{v}</div>
-          <div className="uppercase text-sm">{k}</div>
+  <div className="flex gap-4 text-center select-none">
+    {Object.entries(time).map(([k, v]) => (
+      <div
+        key={k}
+        className="
+          flex flex-col items-center
+          px-3
+          font-['Cinzel']
+            font-light
+
+        "
+      >
+        <div
+           className="
+          text-4xl
+          tracking-widest
+          select-none
+        "
+        style={{
+          color: '#916346',
+          fontSize: "24px",
+          textShadow: `
+            1px 1px 1px rgba(255,255,255,0.35),
+          -1px -1px 1px rgba(0,0,0,0.35)
+          `,
+        }}
+        >
+          {v.toString().padStart(2, '0')}
         </div>
-      ))}
-    </div>
-  )
+
+        <div
+          className="
+          select-none
+        "
+        style={{
+          color: '#916346',
+          fontSize: '10px',
+          letterSpacing: '2px',
+          textShadow: `
+            1px 1px 1px rgba(255,255,255,0.35),
+          -1px -1px 1px rgba(0,0,0,0.35)
+          `,
+        }}
+        >
+          {k}
+        </div>
+      </div>
+    ))}
+  </div>
+)
+
 }

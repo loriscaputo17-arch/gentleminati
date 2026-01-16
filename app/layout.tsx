@@ -2,7 +2,7 @@ import './globals.css'
 import Script from 'next/script'
 
 export const metadata = {
-  title: 'Miutifin | Coming Soon',
+  title: 'Gentleminati | Coming Soon',
   description: 'Qualcosa di grande sta arrivando',
 }
 
