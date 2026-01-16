@@ -17,7 +17,6 @@ export default function Home() {
             md:left-[35%]
             top-[70%]
             left-[35%]
-            w-full
             absolute
             tracking-[0.21em]
             uppercase
