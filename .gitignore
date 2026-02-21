@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+public/landing/*.gif
+public/landing/*.mp4
+public/landing/*.mov

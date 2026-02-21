@@ -1,4 +1,5 @@
 'use client'
+
 import { supabase } from './../lib/supabase'
 import { useState } from 'react'
 
@@ -32,16 +33,8 @@ export default function LeadForm() {
   })
 
   const [prefix, setPrefix] = useState('+39')
-
-  const submit = async (e: any) => {
-    e.preventDefault()
-
-    await supabase.from('leads').insert([
-      { ...form, phone: `${prefix} ${form.phone}` },
-    ])
-
-    alert('Registrazione completata')
-  }
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
 
   const inputStyle = `
     px-3 py-2
@@ -56,15 +49,77 @@ export default function LeadForm() {
     focus:border-[#8f6a3d]
   `
 
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (loading) return
+
+    try {
+      setLoading(true)
+
+      await supabase.from('leads').insert([
+        { ...form, phone: `${prefix} ${form.phone}` },
+      ])
+
+      setSuccess(true)
+
+      setForm({
+        full_name: '',
+        phone: '',
+        email: '',
+        city: '',
+      })
+    } catch (err) {
+      console.error(err)
+      alert('Errore durante la registrazione')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // ================= SUCCESS SCREEN =================
+  if (success) {
+    return (
+      <div className="flex flex-col items-center justify-center text-center p-6">
+
+        <h2
+          className="
+            text-[18px] md:text-[22px]
+            tracking-[0.35em]
+            font-['Cinzel']
+            text-[#8f6a3d]
+            font-bold
+          "
+        >
+          Registration completed
+        </h2>
+
+        <p
+          className="
+            mt-4
+            text-[11px] md:text-[12px]
+            tracking-[0.25em]
+            font-['Cinzel']
+            text-[#4a3828]
+            max-w-[260px] 
+          "
+        >
+YOU WILL RECEIVE <br></br>  UPDATES SOON.
+          <br />
+          STAY CONNECTED.
+        </p>
+
+      </div>
+    )
+  }
+
+  // ================= FORM =================
   return (
-    <form
-      onSubmit={submit}
-      className="flex flex-col gap-4 p-6"
-      style={{ width: '100%' }}
-    >
+    <form onSubmit={submit} className="flex flex-col gap-2 p-6 w-full">
+
       <input
         required
         placeholder="FULL NAME"
+        value={form.full_name}
         className={`${inputStyle} placeholder:text-[#9a8466]`}
         onChange={e => setForm({ ...form, full_name: e.target.value })}
       />
@@ -84,6 +139,7 @@ export default function LeadForm() {
         <input
           required
           placeholder="PHONE"
+          value={form.phone}
           className={`${inputStyle} flex-1 placeholder:text-[#9a8466]`}
           onChange={e => setForm({ ...form, phone: e.target.value })}
         />
@@ -93,6 +149,7 @@ export default function LeadForm() {
         required
         placeholder="EMAIL"
         type="email"
+        value={form.email}
         className={`${inputStyle} placeholder:text-[#9a8466]`}
         onChange={e => setForm({ ...form, email: e.target.value })}
       />
@@ -100,9 +157,9 @@ export default function LeadForm() {
       {/* CITY */}
       <select
         required
+        value={form.city}
         className={inputStyle}
         onChange={e => setForm({ ...form, city: e.target.value })}
-        defaultValue=""
       >
         <option value="" disabled>
           CITY
@@ -115,6 +172,7 @@ export default function LeadForm() {
       </select>
 
       <button
+        disabled={loading}
         className="
           mt-2
           py-2
@@ -128,10 +186,13 @@ export default function LeadForm() {
           shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_4px_6px_rgba(0,0,0,0.4)]
           hover:brightness-95
           transition
+          disabled:opacity-60
+          disabled:cursor-not-allowed
         "
       >
-        Request Access
+        {loading ? 'Sending…' : 'Join the family'}
       </button>
+
     </form>
   )
 }

@@ -1,77 +1,139 @@
-import Countdown from './components/Countdown'
+'use client'
+
+import { useRef, useState } from 'react'
 import LeadForm from './components/LeadForm'
 
 export default function Home() {
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const [showBg, setShowBg] = useState(false)
+  const [showFolla, setShowFolla] = useState(false)
+
+  const handleTimeUpdate = () => {
+    const t = videoRef.current?.currentTime || 0
+
+    // ⏱️ sfondo leggermente prima
+    if (t >= 5.6 && !showBg) {
+      setShowBg(true)
+
+      // ⏱️ folla dopo 1s
+      setTimeout(() => {
+        setShowFolla(true)
+      }, 1000)
+    }
+  }
+
   return (
-    <main
-      className="min-h-screen bg-cover bg-center flex flex-col items-center justify-between p-8"
-      style={{ backgroundImage: "url('/bg.png')" }}
-    >
-      <div className="relative md:mb-0">
-        <img src="/logoprincipale2.png" className="md:w-[30vw] w-[90vw] mx-auto opacity-90" />
-        <h3
-          className="
-            md:text-sm
-            text-xs
-            md:top-[65%]
-            md:left-[35%]
-            top-[70%]
-            left-[35%]
-            absolute
-            tracking-[0.21em]
-            uppercase
-            select-none
-            font-['Cinzel']
-            w-[fit-content]
-          "
-          style={{
-            color: '#916346',
-            textShadow: `
-              1px 1px 1px rgba(255,255,255,0.35),
-            -1px -1px 1px rgba(0,0,0,0.35)
-            `,
-          }}
+    <main className="min-h-screen w-full overflow-hidden bg-black">
+      <div className="fixed inset-0 z-10">
+
+        {/* ================= VIDEO ================= */}
+        <video
+          ref={videoRef}
+          src="/landing/verticale.mp4"
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+          onTimeUpdate={handleTimeUpdate}
+          className="w-full h-full object-cover"
+        />
+
+        {/* ================= SFONDO ================= */}
+        <picture
+          className={`
+            absolute inset-0 z-20 pointer-events-none
+            transition-opacity duration-1000 ease-out
+            ${showBg ? 'opacity-100' : 'opacity-0'}
+          `}
         >
-          Coming Soon
-        </h3>
+          {/* Desktop */}
+          <source
+            media="(min-width: 768px)"
+            srcSet="/landing/sfondoapertura_dekstop.png"
+          />
+
+          {/* Mobile */}
+          <img
+            src="/landing/sfondoapertura_cellulare.png"
+            className="w-full h-full object-cover"
+            alt=""
+          />
+        </picture>
+
+        {/* ================= FOLLA ================= */}
+        <img
+          src="https://firebasestorage.googleapis.com/v0/b/cleope-80cdc.firebasestorage.app/o/follagif.gif?alt=media&token=534d6c10-8d88-43b8-a2ba-65cc74283482"
+          className={`
+            absolute inset-0 w-full h-full object-cover
+            pointer-events-none z-30
+            top-[20%]
+            transition-opacity duration-1000 ease-out
+            ${showFolla ? 'opacity-100' : 'opacity-0'}
+          `}
+          alt=""
+        />
+
+        {/* ================= SOLDI ================= */}
+        <img
+          src="/landing/soldigif.gif"
+          className={`
+            absolute inset-0 w-full h-full object-cover
+            pointer-events-none z-40
+            transition-opacity duration-1000 ease-out
+            ${showBg ? 'opacity-100' : 'opacity-0'}
+          `}
+          alt=""
+        />
+
+        {/* ================= CARTELLO + FORM ================= */}
+        <div
+          className={`
+            absolute inset-0
+            flex items-end justify-left
+            z-50
+            transition-opacity duration-700 ease-out
+            ${showFolla ? 'opacity-100' : 'opacity-0'}
+          `}
+        >
+          <div className="relative w-[120vw] md:w-[55%] max-w-none">
+
+            {/* CARTELLO */}
+            <picture>
+              {/* Desktop */}
+              <source
+                media="(min-width: 768px)"
+                srcSet="/landing/cartello.png"
+              />
+
+              {/* Mobile */}
+              <img
+                src="/landing/cartello_cellulare.png"
+                className="w-full drop-shadow-[0_25px_80px_rgba(0,0,0,0.7)]"
+                alt=""
+              />
+            </picture>
+
+            {/* FORM */}
+            <div
+              className="
+                absolute inset-0
+                flex items-center justify-center
+                px-4 z-[60]
+                md:w-[55%]
+                md:bottom-[31%]
+                md:top-0
+                top-[12%]
+                md:left-[6%]
+              "
+              style={{rotate: '-6deg'}}
+            >
+              <LeadForm />
+            </div>
+
+          </div>
+        </div>
 
       </div>
-
-      <div className="flex flex-col items-center">
-        <Countdown />
-      </div>
-
-      <div className="md:w-[30vw] w-[90vw]" >
-        <LeadForm />
-      </div>
-
-      <div className="flex justify-center gap-6 mt-2">
-        <img src="/logo1.svg" className="h-34 opacity-80" />
-        <img src="/logo2.svg" className="h-34 opacity-80" />
-      </div>
-
-<footer
-  className="
-    text-xs
-    tracking-widest
-    pt-2
-    font-['Cinzel']
-    select-none
-    text-center
-  "
-  style={{
-    color: '#916346',
-    textShadow: `
-      1px 1px 1px rgba(255,255,255,0.35),
-     -1px -1px 1px rgba(0,0,0,0.35)
-    `,
-  }}
->
-  © {new Date().getFullYear()} - GENTLEMINATI
-</footer>
-
-
-
     </main>
   )
 }
