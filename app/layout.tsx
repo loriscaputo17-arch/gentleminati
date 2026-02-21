@@ -1,10 +1,27 @@
 import './globals.css'
 import Script from 'next/script'
+import localFont from 'next/font/local'
 
 export const metadata = {
   title: 'Gentleminati | Coming Soon',
   description: 'Qualcosa di grande sta arrivando',
 }
+
+const gentleminati = localFont({
+  src: [
+    {
+      path: './fonts/gentleminati-regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: './fonts/gentleminati-bold.woff2',
+      weight: '700',
+      style: 'normal', // ✅ FIX
+    },
+  ],
+  variable: '--font-gentleminati',
+})
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -23,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
         </Script>
       </head>
-      <body>{children}</body>
+      <body className={`${gentleminati.variable} font-gentle`}>{children}</body>
     </html>
   )
 }

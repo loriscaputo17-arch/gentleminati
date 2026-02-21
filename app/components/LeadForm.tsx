@@ -40,7 +40,6 @@ export default function LeadForm() {
     px-3 py-2
     text-[12px]
     tracking-[0.25em]
-    font-['Cinzel']
     text-[#4a3828]
     bg-[#f0e8d8]
     border border-[#b79b6a]
@@ -85,7 +84,6 @@ export default function LeadForm() {
           className="
             text-[18px] md:text-[22px]
             tracking-[0.35em]
-            font-['Cinzel']
             text-[#8f6a3d]
             font-bold
           "
@@ -98,7 +96,6 @@ export default function LeadForm() {
             mt-4
             text-[11px] md:text-[12px]
             tracking-[0.25em]
-            font-['Cinzel']
             text-[#4a3828]
             max-w-[260px] 
           "
@@ -178,7 +175,6 @@ YOU WILL RECEIVE <br></br>  UPDATES SOON.
           py-2
           text-[12px]
           tracking-[0.3em]
-          font-['Cinzel']
           uppercase
           text-[#3d2b1f]
           bg-gradient-to-b from-[#e6d3a3] to-[#b8965a]
