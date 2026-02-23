@@ -38,7 +38,7 @@ export default function Home() {
         >
           {/* Desktop */}
           <source
-            src="/landing/orizzontale.mp4"
+            src="https://firebasestorage.googleapis.com/v0/b/cleope-80cdc.firebasestorage.app/o/gentleminati%2Forizzontale.mp4?alt=media&token=3558e98e-6204-492e-9e9f-0394a7f2a59f"
             media="(min-width: 768px)"
             type="video/mp4"
           />
