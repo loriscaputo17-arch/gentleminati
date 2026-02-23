@@ -29,14 +29,27 @@ export default function Home() {
         {/* ================= VIDEO ================= */}
         <video
           ref={videoRef}
-          src="/landing/verticale.mp4"
           autoPlay
           muted
           playsInline
           preload="auto"
           onTimeUpdate={handleTimeUpdate}
           className="w-full h-full object-cover"
-        />
+        >
+          {/* Desktop */}
+          <source
+            src="/landing/orizzontale.mp4"
+            media="(min-width: 768px)"
+            type="video/mp4"
+          />
+
+          {/* Mobile */}
+          <source
+            src="/landing/verticale.mp4"
+            media="(max-width: 767px)"
+            type="video/mp4"
+          />
+        </video>
 
         {/* ================= SFONDO ================= */}
         <picture
@@ -62,7 +75,7 @@ export default function Home() {
 
         {/* ================= FOLLA ================= */}
         <img
-          src="https://firebasestorage.googleapis.com/v0/b/cleope-80cdc.firebasestorage.app/o/follagif.gif?alt=media&token=534d6c10-8d88-43b8-a2ba-65cc74283482"
+          src="https://firebasestorage.googleapis.com/v0/b/cleope-80cdc.firebasestorage.app/o/folla.gif?alt=media&token=0bdf93e2-6793-4cac-baf9-dbae532d64bc"
           className={`
             absolute inset-0 w-full h-full object-cover
             pointer-events-none z-30
@@ -87,14 +100,20 @@ export default function Home() {
 
         {/* ================= CARTELLO + FORM ================= */}
         <div
-          className={`
-            absolute inset-0
-            flex items-end justify-left
-            z-50
-            transition-opacity duration-700 ease-out
-            ${showFolla ? 'opacity-100' : 'opacity-0'}
-          `}
-        >
+            className={`
+              absolute inset-0
+              flex items-end justify-left
+              z-50
+              transition-all duration-700 ease-[cubic-bezier(.22,.8,.22,1)]
+              will-change-transform
+
+              ${
+                showFolla
+                  ? 'opacity-100 translate-y-0'
+                  : 'opacity-0 translate-y-[120px] md:translate-y-[180px]'
+              }
+            `}
+          >
           <div className="relative w-[120vw] md:w-[55%] max-w-none">
 
             {/* CARTELLO */}
