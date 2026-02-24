@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect} from 'react'
 import LeadForm from './components/LeadForm'
 
 export default function Home() {
@@ -8,19 +8,46 @@ export default function Home() {
   const [showBg, setShowBg] = useState(false)
   const [showFolla, setShowFolla] = useState(false)
 
-  const handleTimeUpdate = () => {
-    const t = videoRef.current?.currentTime || 0
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
 
-    // ⏱️ sfondo leggermente prima
-    if (t >= 5.6 && !showBg) {
-      setShowBg(true)
+    const interval = setInterval(() => {
+      const t = video.currentTime || 0
 
-      // ⏱️ folla dopo 1s
-      setTimeout(() => {
-        setShowFolla(true)
-      }, 1000)
+      if (t >= 5.6 && !showBg) {
+        setShowBg(true)
+
+        setTimeout(() => {
+          setShowFolla(true)
+        }, 1000)
+      }
+    }, 200) // controlla ogni 200ms
+
+    return () => clearInterval(interval)
+  }, [showBg])
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    const tryPlay = async () => {
+      try {
+        await video.play()
+      } catch (e) {
+        // retry dopo interazione utente
+        const resume = () => {
+          video.play().catch(() => {})
+          window.removeEventListener('touchstart', resume)
+          window.removeEventListener('click', resume)
+        }
+        window.addEventListener('touchstart', resume, { once: true })
+        window.addEventListener('click', resume, { once: true })
+      }
     }
-  }
+
+    tryPlay()
+  }, [])
 
   return (
     <main className="min-h-screen w-full overflow-hidden bg-black">
@@ -32,8 +59,8 @@ export default function Home() {
           autoPlay
           muted
           playsInline
-          preload="auto"
-          onTimeUpdate={handleTimeUpdate}
+          preload="metadata"
+          poster="/landing/poster.jpg"
           className="w-full h-full object-cover"
         >
           {/* Desktop */}
@@ -74,17 +101,49 @@ export default function Home() {
         </picture>
 
         {/* ================= FOLLA ================= */}
-        <img
-          src="https://firebasestorage.googleapis.com/v0/b/cleope-80cdc.firebasestorage.app/o/folla.gif?alt=media&token=0bdf93e2-6793-4cac-baf9-dbae532d64bc"
-          className={`
-            absolute inset-0 w-full h-full object-cover
-            pointer-events-none z-30
-            top-[20%]
-            transition-opacity duration-1000 ease-out
-            ${showFolla ? 'opacity-100' : 'opacity-0'}
-          `}
-          alt=""
-        />
+        {showFolla && (
+          <>
+            {/* ✅ VIDEO moderno */}
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="none"
+              className={`
+                absolute left-1/2 md:bottom-[-100px] bottom-[20px]
+                -translate-x-1/2 scale-[1.25] md:scale-100
+                w-full h-auto
+                object-cover
+                pointer-events-none z-30
+                transition-opacity duration-1000 ease-out
+                will-change-transform
+                hidden supports-[video/webm]:block
+              `}
+            >
+              <source
+                src="https://firebasestorage.googleapis.com/v0/b/cleope-80cdc.firebasestorage.app/o/gentleminati%2Ffolla.webm?alt=media&token=16930020-3e72-4695-8ba6-82b6f7320115"
+                type="video/webm"
+              />
+            </video>
+
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/cleope-80cdc.firebasestorage.app/o/folla.gif?alt=media&token=0bdf93e2-6793-4cac-baf9-dbae532d64bc"
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className={`
+                absolute left-1/2 md:bottom-[-100px] bottom-[20px]
+                -translate-x-1/2 scale-[1.25] md:scale-100
+                w-full h-auto
+                object-cover
+                pointer-events-none z-30
+                transition-opacity duration-1000 ease-out
+                supports-[video/webm]:hidden
+              `}
+            />
+          </>
+        )}
 
         {/* ================= SOLDI ================= */}
         <img
@@ -114,7 +173,7 @@ export default function Home() {
               }
             `}
           >
-          <div className="relative w-[120vw] md:w-[55%] max-w-none">
+          <div className="relative w-[120vw] md:w-[75%] xl:w-[55%] max-w-none">
 
             {/* CARTELLO */}
             <picture>
