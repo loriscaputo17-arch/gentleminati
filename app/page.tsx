@@ -6,7 +6,6 @@ import LeadForm from './components/LeadForm'
 export default function Home() {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [showBg, setShowBg] = useState(false)
-  const [showFolla, setShowFolla] = useState(false)
 
   useEffect(() => {
     const video = videoRef.current
@@ -17,12 +16,8 @@ export default function Home() {
 
       if (t >= 5.6 && !showBg) {
         setShowBg(true)
-
-        setTimeout(() => {
-          setShowFolla(true)
-        }, 1000)
       }
-    }, 200) // controlla ogni 200ms
+    }, 200)
 
     return () => clearInterval(interval)
   }, [showBg])
@@ -100,51 +95,6 @@ export default function Home() {
           />
         </picture>
 
-        {/* ================= FOLLA ================= */}
-        {showFolla && (
-          <>
-            {/* ✅ VIDEO moderno */}
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="none"
-              className={`
-                absolute left-1/2 md:bottom-[-100px] bottom-[20px]
-                -translate-x-1/2 scale-[1.25] md:scale-100
-                w-full h-auto
-                object-cover
-                pointer-events-none z-30
-                transition-opacity duration-1000 ease-out
-                will-change-transform
-                hidden supports-[video/webm]:block
-              `}
-            >
-              <source
-                src="https://firebasestorage.googleapis.com/v0/b/cleope-80cdc.firebasestorage.app/o/gentleminati%2Ffolla.webm?alt=media&token=16930020-3e72-4695-8ba6-82b6f7320115"
-                type="video/webm"
-              />
-            </video>
-
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/cleope-80cdc.firebasestorage.app/o/folla.gif?alt=media&token=0bdf93e2-6793-4cac-baf9-dbae532d64bc"
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className={`
-                absolute left-1/2 md:bottom-[-100px] bottom-[20px]
-                -translate-x-1/2 scale-[1.25] md:scale-100
-                w-full h-auto
-                object-cover
-                pointer-events-none z-30
-                transition-opacity duration-1000 ease-out
-                supports-[video/webm]:hidden
-              `}
-            />
-          </>
-        )}
-
         {/* ================= SOLDI ================= */}
         <img
           src="/landing/soldigif.gif"
@@ -167,13 +117,13 @@ export default function Home() {
               will-change-transform
 
               ${
-                showFolla
+                showBg
                   ? 'opacity-100 translate-y-0'
                   : 'opacity-0 translate-y-[120px] md:translate-y-[180px]'
               }
             `}
           >
-          <div className="relative w-[120vw] md:w-[75%] xl:w-[55%] max-w-none">
+          <div className="relative w-[120vw] md:w-[75%] xl:w-[85%] max-w-none">
 
             {/* CARTELLO */}
             <picture>
@@ -198,7 +148,7 @@ export default function Home() {
                 flex items-center justify-center
                 px-4 z-[60]
                 md:w-[55%]
-                md:bottom-[31%]
+                md:bottom-[35%]
                 md:top-0
                 top-[12%]
                 md:left-[6%]
